@@ -32,7 +32,7 @@ class BaseModel:
                 self.updated_at = datetime.now()
 
         else:
-            self.id = str(uuid4)
+            self.id = str(uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
             if storage:
