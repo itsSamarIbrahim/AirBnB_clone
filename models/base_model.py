@@ -16,7 +16,7 @@ class BaseModel:
         """
         Initialize BaseModel instance.
         """
-        if kwargs is not None:
+        if kwargs is not None and kwargs != {}:
             for key, value in kwargs.items():
                 if key == "__class__":
                     continue
