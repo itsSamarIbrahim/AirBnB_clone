@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-
+A class BaseModel that defines all common attributes/methods for other classes
 """
 from uuid import uuid4
 from datetime import datetime
@@ -9,13 +9,15 @@ from datetime import datetime
 class BaseModel:
     """
     """
+
     def __init__(self, *args, **kwargs):
         if kwargs is not None:
             for key, value in kwargs.items():
                 if key == "__class__":
                     continue
                 elif key in ['created_at', 'updated_at']:
-                    setattr(self, key, datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f'))
+                    setattr(self, key, datetime.strptime(
+                        value, '%Y-%m-%dT%H:%M:%S.%f'))
                 else:
                     setattr(self, key, value)
         else:
