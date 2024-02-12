@@ -1,7 +1,13 @@
 #!/usr/bin/python3
+"""
+A program called console.py that contains
+the entry point of the command interpreter
+"""
 import cmd
 
+
 class HBNBCommand(cmd.Cmd):
+    """initializing HBNBCommand"""
     prompt = "(hbnb) "
 
     def do_quit(self, arg):
