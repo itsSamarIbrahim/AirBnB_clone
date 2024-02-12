@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import json
+import os
 
 
 class FileStorage:
@@ -7,30 +8,35 @@ class FileStorage:
     __objects = {}
 
     def all(self):
+        """Returns the dictionary __objects."""
         return self.__objects
 
     def new(self, obj):
-        key = f"{obj.__class__.name}.{obj.id}"
+        """Sets in __objects the obj with key <obj class name>.id."""
+        key = "{}.{}".format(obj.__class__.__name__, obj.id)
         self.__objects[key] = obj
 
     def save(self):
+        """Serializes __objects to the JSON file."""
         serialized_objects = {}
         for key, obj in self.__objects.items():
-            class_name = obj.__class__.__name__
-            obj_id = obj.id
-            serialized_objects[obj_id] = obj.to_dict()
-        with open(self.__file_path, 'w') as File:
-            json.dump(serialized_objects, File)
+            serialized_objects[key] = obj.to_dict()
+        with open(self.__file_path, 'w', encoding="UTF-8") as f:
+            json.dump(serialized_objects, f)
 
     def reload(self):
+        """Deserializes the JSON file to __objects."""
         try:
-            with open(self.__file_path, 'r', encoding="UTF-8") as File:
-                loaded_objects = json.load(File)
-                for obj_id, obj_dict in loaded_objects.items():
-                    class_name = obj_dict['__class__']
-                    cls = globals()[class_name]
-                    obj = cls(**obj_dict)
-                    key = f"{class_name}.{obj_id}"
-                    self.__objects[key] = obj
+            loaded_objects = {}
+            if os.path.exists(self.__file_path):
+                with open(self.__file_path, "r", encoding="UTF-8") as f:
+                    loaded_objects = json.loads(f.read())
+                """ convert dict to obj and insert them in __objects """
+                for key, obj_dict in loaded_objects.items():
+                    class_name = obj_dict.get('__class__')
+                    if class_name in globals():
+                        cls = globals()[class_name]
+                        instance = cls(**obj_dict)
+                        self.__objects[key] = instance
         except FileNotFoundError:
             pass

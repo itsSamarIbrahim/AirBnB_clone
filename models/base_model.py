@@ -12,7 +12,7 @@ class BaseModel:
     BaseModel class defines common attributes/methods for other classes.
     """
 
-    def __init__(self, storage=None, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         """
         Initialize BaseModel instance.
         """
@@ -37,7 +37,6 @@ class BaseModel:
             self.updated_at = datetime.now()
             if storage:
                 storage.new(self)
-        self.storage = storage
 
     def __str__(self):
         """
@@ -51,8 +50,8 @@ class BaseModel:
         updated_at with the current datetime.
         """
         self.updated_at = datetime.now()
-        if self.storage:
-            self.storage.save()
+        if storage:
+            storage.save()
 
     def to_dict(self):
         """
